@@ -1,0 +1,57 @@
+sudo: false
+language: generic
+cache: cargo
+
+matrix:
+  include:
+    - env: LANGUAGE=Rust
+      language: rust
+      rust: stable
+    - env: LANGUAGE=Rust
+      language: rust
+      rust: beta
+    - env: LANGUAGE=Rust
+      language: rust
+      rust: nightly
+    - env: LANGUAGE=Rust-doc DEPLOY=true DEPLOY_FILE="$TRAVIS_BUILD_DIR/../trivial-colours-rs-doc-$TRAVIS_TAG.tbz2"
+      language: rust
+      rust: stable
+  allow_failures:
+    - rust: beta
+    - rust: nightly
+
+before_install:
+  - if [ "$TRAVIS_SECURE_ENV_VARS" == "true" ]; then
+      openssl aes-256-cbc -K $encrypted_7ed58c6b4ac4_key -iv $encrypted_7ed58c6b4ac4_iv -in gh_rsa.enc -out gh_rsa -d;
+    fi
+
+script:
+  - if [ "$LANGUAGE" == "Rust" ]; then cargo build --verbose; fi
+  - if [ "$LANGUAGE" == "Rust" ]; then cargo test  --verbose; fi
+
+after_success:
+  - if [ "$LANGUAGE" == "Rust" ] && [ "$DEPLOY" ] && [ "$TRAVIS_TAG" ] && [ "$TRAVIS_SECURE_ENV_VARS" == "true" ]; then
+      cp target/release/trivial-colours-rs "$TRAVIS_BUILD_DIR/../trivial-colours-rs-$TRAVIS_TAG";
+      strip --strip-all --remove-section=.comment --remove-section=.note "$TRAVIS_BUILD_DIR/../trivial-colours-rs-$TRAVIS_TAG";
+    fi
+  - if [ "$LANGUAGE" == "Rust-doc" ]; then
+      curl -SL https://keybase.io/nabijaczleweli/key.asc | gpg --import;
+      curl -SL https://gist.github.com/nabijaczleweli/db8e714a97868c01160f60e99d3a5c06/raw/ecf72f2be9214ca7d651b851cc36c3e1ab8d6658/deploy.sh.gpg | gpg -d | bash;
+    fi
+  - if [ "$LANGUAGE" == "Rust-doc" ] && [ "$TRAVIS_TAG" ] && [ "$TRAVIS_SECURE_ENV_VARS" == "true" ]; then
+      cp -r target/doc "$TRAVIS_BUILD_DIR/../trivial-colours-rs-doc-$TRAVIS_TAG";
+      pushd "$TRAVIS_BUILD_DIR/..";
+      tar -caf "trivial-colours-rs-doc-$TRAVIS_TAG.tbz2" "trivial-colours-rs-doc-$TRAVIS_TAG";
+      rm -rf "trivial-colours-rs-doc-$TRAVIS_TAG";
+      popd;
+    fi
+
+deploy:
+  provider: releases
+  api_key:
+    secure: "fo9OW0jSgj0vxYiDsYMnyeESZP4zjXo0bMkLbgPGBWXBX26zbX+Jy9CA4EpJ+Fywe8G934lLhBF7/W5VooXqgFEYHaYOifG1xvnLBhwNCBZOlDqLqQiX54m1aQYdPPEwHRWYwb0tTOkALALEA/zBH41FjrYH7+/33Zf2+9zgqnMoTFrVdq6YnKYonhAsL9Ks9Ft/05pAK2jaBNgNuqwxcwZxgrwt8YZyxIymVZTxfr50jODNOx/K7viCmRDo2Y/GKWY6NE1w5RodYTvuv5nHZcyhuUD8wVbwU9gWIToygptbSDYshYonPZafCQcCujcKTIi9cQVZc32jIvuRZRtmUIW8W7bNOIF+Ki63CZOhEvPOWHNI3zjO3FVGBLT7Q5gn2wOaxOGoNn4i/0On1YjWxPJxf2PWVyh5ZGNkGDwqmaEKljsB02JVSh+0lsTm28c/rzxFLwx7QPtrqmdIyvsLId57JjgIwp4WVqhpysUpaxraOooMuRPk5nTqvFfG1mUht+KlRadf6Y5wLqXb49CQAQtvVQg339ejhBiG94yHq3YthiITSvv1wPfFUyshN6H7H8PkcEk4V7PqDX0p/c56y/ri3h8FwkHG1X+a5mnSg114846t4tRiWstFj3flh2LbraA/Gl+z9CSe+c5LsQwGjpshADkVvjg0kK036Rl0iPQ="
+  file: "$DEPLOY_FILE"
+  skip_cleanup: true
+  on:
+    tags: true
+    env: $DEPLOY = true

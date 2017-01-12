@@ -1,0 +1,17 @@
+[package]
+name = "trivial_colours"
+description = "Very simple and naive colour changing for your terminal, but that's exactly what you need sometimes"
+documentation = "https://cdn.rawgit.com/nabijaczleweli/trivial-colours-rs/doc/trivial_colours/index.html"
+repository = "https://github.com/nabijaczleweli/trivial-colours-rs"
+readme = "README.md"
+keywords = ["color", "terminal", "simple"]
+license = "MIT"
+# Remember to also update in appveyor.yml
+version = "0.1.0"
+authors = ["nabijaczleweli <nabijaczleweli@gmail.com>"]
+exclude = ["*.enc"]
+
+
+[target.'cfg(target_os = "windows")'.dependencies]
+kernel32-sys = "0.2"
+winapi = "0.2"

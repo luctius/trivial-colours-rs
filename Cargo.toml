@@ -13,6 +13,10 @@ exclude = ["*.enc"]
 
 
 [target.'cfg(target_os = "windows")'.dependencies]
-kernel32-sys = "0.2"
-lazy_static = "0.2"
-winapi = "0.2"
+kernel32-sys = { version = "0.2", optional = true }
+lazy_static = { version = "0.2", optional = true }
+winapi = { version = "0.2", optional = true }
+
+[features]
+default = ["use_winapi"]
+use_winapi = ["kernel32-sys","lazy_static", "winapi"]

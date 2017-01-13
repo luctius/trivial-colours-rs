@@ -5,6 +5,7 @@
 /// # Examples
 ///
 /// ```
+/// # use trivial_colours::{BgColour, Reset};
 /// print!("{}", Reset);
 ///
 /// println!("{}BgColour::Black", BgColour::Black);
@@ -20,21 +21,25 @@
 /// ```
 
 
-#[cfg(target_os = "windows")]
+#[cfg(all(target_os = "windows", feature = "use_winapi"))]
 #[macro_use]
 extern crate lazy_static;
-#[cfg(target_os = "windows")]
+#[cfg(all(target_os = "windows", feature = "use_winapi"))]
 extern crate kernel32;
-#[cfg(target_os = "windows")]
+#[cfg(all(target_os = "windows", feature = "use_winapi"))]
 extern crate winapi;
 
-#[cfg(target_os = "windows")]
-mod windows;
+#[cfg(all(target_os = "windows", feature = "use_winapi"))]
+mod windows_winapi;
+#[cfg(all(target_os = "windows", not(feature = "use_winapi")))]
+mod dummy;
 #[cfg(not(target_os = "windows"))]
 mod not_windows;
 
-#[cfg(target_os = "windows")]
-pub use self::windows::*;
+#[cfg(all(target_os = "windows", feature = "use_winapi"))]
+pub use self::windows_winapi::*;
+#[cfg(all(target_os = "windows", not(feature = "use_winapi")))]
+pub use self::dummy::*;
 #[cfg(not(target_os = "windows"))]
 pub use self::not_windows::*;
 

@@ -1,3 +1,25 @@
+/// Very simple and naive colour changing for your terminal, but that's exactly what you need sometimes.
+///
+/// All colour-related things are used by `Display`ing them.
+///
+/// # Examples
+///
+/// ```
+/// print!("{}", Reset);
+///
+/// println!("{}BgColour::Black", BgColour::Black);
+/// println!("{}BgColour::Red", BgColour::Red);
+/// println!("{}BgColour::Green", BgColour::Green);
+/// println!("{}BgColour::Yellow", BgColour::Yellow);
+/// println!("{}BgColour::Blue", BgColour::Blue);
+/// println!("{}BgColour::Magenta", BgColour::Magenta);
+/// println!("{}BgColour::Cyan", BgColour::Cyan);
+/// println!("{}BgColour::White", BgColour::White);
+///
+/// println!("{}This text has default colours", Reset);
+/// ```
+
+
 #[cfg(target_os = "windows")]
 #[macro_use]
 extern crate lazy_static;

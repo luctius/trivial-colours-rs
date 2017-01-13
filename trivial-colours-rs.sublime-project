@@ -27,8 +27,8 @@
 		},
 		{
 			"follow_symlinks": true,
-			"name": "Tests",
-			"path": "tests"
+			"name": "Examples",
+			"path": "examples"
 		},
 		{
 			"follow_symlinks": true,

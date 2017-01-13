@@ -10,5 +10,5 @@
 !*.md
 !src
 !src/**
-!tests
-!tests/**
+!examples
+!examples/**

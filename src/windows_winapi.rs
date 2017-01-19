@@ -54,23 +54,29 @@ fn set_clr(slf: usize, r: u32, g: u32, b: u32, mask: WORD) {
 
 
 impl fmt::Display for Colour {
-    fn fmt(&self, _: &mut fmt::Formatter) -> fmt::Result {
-        set_clr(*self as usize, FOREGROUND_RED, FOREGROUND_GREEN, FOREGROUND_BLUE, 0x0F);
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        if f.precision() != Some(0) {
+            set_clr(*self as usize, FOREGROUND_RED, FOREGROUND_GREEN, FOREGROUND_BLUE, 0x0F);
+        }
         Ok(())
     }
 }
 
 impl fmt::Display for BgColour {
-    fn fmt(&self, _: &mut fmt::Formatter) -> fmt::Result {
-        set_clr(*self as usize, BACKGROUND_RED, BACKGROUND_GREEN, BACKGROUND_BLUE, 0xF0);
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        if f.precision() != Some(0) {
+            set_clr(*self as usize, BACKGROUND_RED, BACKGROUND_GREEN, BACKGROUND_BLUE, 0xF0);
+        }
         Ok(())
     }
 }
 
 impl fmt::Display for Reset {
-    fn fmt(&self, _: &mut fmt::Formatter) -> fmt::Result {
-        unsafe {
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), *DEFAULT_ATTRIBUTES);
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        if f.precision() != Some(0) {
+            unsafe {
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), *DEFAULT_ATTRIBUTES);
+            }
         }
         Ok(())
     }

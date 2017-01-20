@@ -5,6 +5,7 @@ documentation = "https://cdn.rawgit.com/nabijaczleweli/trivial-colours-rs/doc/tr
 repository = "https://github.com/nabijaczleweli/trivial-colours-rs"
 readme = "README.md"
 keywords = ["color", "terminal", "simple"]
+categories = ["command-line-interface"]
 license = "MIT"
 # Remember to also update in appveyor.yml
 version = "0.2.0"

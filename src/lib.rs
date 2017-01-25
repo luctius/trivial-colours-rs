@@ -48,6 +48,8 @@ pub use self::not_windows::*;
 ///
 /// Use them with `Display` to engage setting colour.
 ///
+/// You can use this with `{:.0}` which will *not* change the colour.
+///
 /// Note: take *extreme* care, as each and every call to `Display::fmt()` on this enum might change the *terminal*'s foreground
 /// colour on some platforms.
 ///
@@ -76,6 +78,8 @@ pub enum Colour {
 ///
 /// Use them with `Display` to engage setting colour.
 ///
+/// You can use this with `{:.0}` which will *not* change the colour.
+///
 /// Note: take *extreme* care, as each and every call to `Display::fmt()` on this enum might change the *terminal*'s background
 /// colour on some platforms.
 ///
@@ -103,6 +107,8 @@ pub enum BgColour {
 /// The attribute resetter.
 ///
 /// Use this with `Display` to reset the attributes.
+///
+/// You can use this with `{:.0}` which will *not* reset the colour.
 ///
 /// Note: you *need* to `Display::fmt()` on this at least once before using it to reset changes.
 ///

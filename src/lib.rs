@@ -20,6 +20,8 @@
 /// println!("{}This text has default colours", Reset);
 /// ```
 
+#[cfg(feature = "no_std")]
+#[no_std]
 
 #[cfg(all(target_os = "windows", feature = "use_winapi"))]
 #[macro_use]
@@ -28,6 +30,9 @@ extern crate lazy_static;
 extern crate kernel32;
 #[cfg(all(target_os = "windows", feature = "use_winapi"))]
 extern crate winapi;
+
+#[cfg(all(feature = "use_winapi", feature = "no_std"))]
+compile_error!("features `use_winapi` and `no_std` are mutually exclusive");
 
 #[cfg(all(target_os = "windows", feature = "use_winapi"))]
 mod windows_winapi;
@@ -42,7 +47,6 @@ pub use self::windows_winapi::*;
 pub use self::dummy::*;
 #[cfg(not(target_os = "windows"))]
 pub use self::not_windows::*;
-
 
 /// The supported foreground colours.
 ///

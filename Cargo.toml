@@ -21,3 +21,4 @@ winapi = { version = "0.2", optional = true }
 [features]
 default = ["use_winapi"]
 use_winapi = ["kernel32-sys","lazy_static", "winapi"]
+no_std = []
